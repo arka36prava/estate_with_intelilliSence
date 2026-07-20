@@ -1,0 +1,341 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+////////////////////////////////////////////
+// Enums
+///////////////////////////////////////////
+
+enum PropertyType {
+  APARTMENT
+  VILLA
+  HOUSE
+  PLOT
+  COMMERCIAL
+}
+
+enum ListingType {
+  SALE
+  RENT
+}
+
+enum Furnishing {
+  UNFURNISHED
+  SEMI_FURNISHED
+  FULLY_FURNISHED
+}
+
+//////////////////////////////////////////
+//User Model
+/////////////////////////////////////////
+
+model User {
+  id      String @id @default(cuid())
+  clerkId String @unique
+
+  email     String  @unique
+  firstName String?
+  lastName  String?
+  imageUrl  String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  favorites          Favorite[]
+  bookings           Booking[]
+  aiChats            AIChat[]
+  investmentAnalyses InvestmentAnalysis[]
+}
+
+//////////////////////////////////////////
+// Property Model
+//////////////////////////////////////////
+model Property {
+  id String @id @default(cuid())
+
+  title       String
+  description String
+
+  price Decimal @db.Decimal(12, 2)
+
+  propertyType PropertyType
+  listingType  ListingType
+
+  city     String
+  locality String
+  address  String
+
+  bedrooms  Int
+  bathrooms Int
+
+  area Float
+
+  parking Int
+
+  furnishing Furnishing
+
+  yearBuilt Int?
+
+  latitude  Float?
+  longitude Float?
+
+  expectedRental Decimal? @db.Decimal(12, 2)
+  appreciation   Float?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  images PropertyImage[]
+
+  favorites Favorite[]
+
+  bookings Booking[]
+
+  investmentAnalyses InvestmentAnalysis[]
+  riskAnalysis       RiskAnalysis?
+  propertyScore      PropertyScore?
+}
+
+/////////////////////////////////////////////////
+//Property images
+/////////////////////////////////////////////////
+model PropertyImage {
+  id String @id @default(cuid())
+
+  imageUrl String
+
+  propertyId String
+
+  property Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+}
+
+/////////////////////////////////////////////
+//Favorite
+///////////////////////////////////////////
+model Favorite {
+  id String @id @default(cuid())
+
+  userId String
+
+  propertyId String
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  property Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, propertyId])
+}
+
+///////////////////////////////////////////////////////
+//bookings
+//////////////////////////////////////////////////////
+model Booking {
+  id String @id @default(cuid())
+
+  visitDate DateTime
+
+  status String
+
+  userId String
+
+  propertyId String
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  property Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+}
+
+////////////////////////////////////
+//AI Chat
+///////////////////////////////////
+enum ChatType {
+  GENERAL
+  PROPERTY_SEARCH
+  INVESTMENT
+  MARKET_ANALYSIS
+  LOAN
+}
+
+model AIChat {
+  id String @id @default(cuid())
+
+  title String?
+
+  type ChatType @default(GENERAL)
+
+  userId String
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  messages AIMessage[]
+
+  createdAt DateTime @default(now())
+
+  updatedAt DateTime @updatedAt
+}
+
+////////////////////////////////////////
+//AI message
+///////////////////////////////////////
+enum MessageRole {
+  USER
+  ASSISTANT
+  SYSTEM
+}
+
+model AIMessage {
+  id String @id @default(cuid())
+
+  chatId String
+
+  role MessageRole
+
+  content String @db.Text
+
+  chat AIChat @relation(fields: [chatId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+}
+
+////////////////////////////////////
+//InvestmentAnalysis
+///////////////////////////////////
+model InvestmentAnalysis {
+  id String @id @default(cuid())
+
+  userId String
+
+  propertyId String
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  property Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+
+  propertyPrice Decimal @db.Decimal(12, 2)
+
+  downPayment Decimal @db.Decimal(12, 2)
+
+  loanAmount Decimal @db.Decimal(12, 2)
+
+  annualInterestRate Float
+
+  loanTenureYears Int
+
+  monthlyEMI Decimal @db.Decimal(12, 2)
+
+  totalInterest Decimal @db.Decimal(12, 2)
+
+  totalPayment Decimal @db.Decimal(12, 2)
+
+  expectedRentalIncome Decimal? @db.Decimal(12, 2)
+
+  expectedROI Float?
+
+  rentalYield Float?
+
+  cashFlow Decimal? @db.Decimal(12, 2)
+
+  riskScore Float?
+
+  investmentScore Float?
+
+  aiRecommendation String? @db.Text
+
+  createdAt DateTime @default(now())
+}
+
+///////////////////////////////////////
+//Market Trend
+//////////////////////////////////////
+model MarketTrend {
+  id String @id @default(cuid())
+
+  city String
+
+  locality String
+
+  averagePrice Decimal @db.Decimal(12, 2)
+
+  yearlyAppreciation Float
+
+  rentalYield Float
+
+  demandIndex Float
+
+  supplyIndex Float
+
+  vacancyRate Float
+
+  averageRent Decimal @db.Decimal(12, 2)
+
+  lastUpdated DateTime @default(now())
+}
+
+////////////////////////////////////
+//Risk Analysis
+///////////////////////////////////
+model RiskAnalysis {
+  id String @id @default(cuid())
+
+  propertyId String @unique
+
+  property Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+
+  legalVerified Boolean
+
+  builderScore Float
+
+  floodRisk Float
+
+  crimeScore Float
+
+  pollutionScore Float
+
+  resaleScore Float
+
+  liquidityScore Float
+
+  marketRisk Float
+
+  overallRisk Float
+
+  updatedAt DateTime @updatedAt
+}
+
+///////////////////////////////////////
+//Property Score
+///////////////////////////////////////
+model PropertyScore {
+  id String @id @default(cuid())
+
+  propertyId String @unique
+
+  property Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+
+  investmentScore Float
+
+  rentalScore Float
+
+  familyScore Float
+
+  studentScore Float
+
+  luxuryScore Float
+
+  futureGrowthScore Float
+
+  aiScore Float
+
+  updatedAt DateTime @updatedAt
+}
