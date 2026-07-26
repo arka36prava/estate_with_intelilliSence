@@ -17,7 +17,7 @@ interface ChatWindowProps {
   messages: Message[];
   loading: boolean;
   report: InvestmentReportType | null;
-  recommendedProperties: any[];
+  recommendedProperties?: any[];
   onSuggestionClick: (question: string) => void;
 }
 
@@ -25,7 +25,7 @@ export default function ChatWindow({
   messages,
   loading,
   report,
-  recommendedProperties,
+  recommendedProperties = [],
   onSuggestionClick,
 }: ChatWindowProps) {
   const bottomRef = useRef<HTMLDivElement>(null);

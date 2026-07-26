@@ -1,8 +1,4 @@
-import "dotenv/config";
-import { prisma } from "../lib/prisma";
-//console.log(process.env.DATABASE_URL);
-async function seedProperties() {
-  const properties = [
+export const properties = [
     {
       id: "1",
       title: "Luxury 3BHK Apartment in New Town",
@@ -40,6 +36,7 @@ async function seedProperties() {
       expectedRental: 32000,
 
       appreciation: 11.5,
+      image: "/images/Properties/project_img_1.jpg",
 
       images: [
         "https://images.unsplash.com/photo-1560185007-c5ca9d2c014d",
@@ -76,7 +73,7 @@ async function seedProperties() {
       title: "Modern Villa in Whitefield",
 
       description:
-        "Luxury gated community villa close to IT Parks.",
+        "Premium apartment in Whitefield offering seamless access to major IT parks, metro connectivity, reputed international schools, healthcare facilities, shopping malls, and a wide range of lifestyle amenities, making it an excellent choice for families and professionals alike.",
 
       price: 18500000,
 
@@ -109,6 +106,8 @@ async function seedProperties() {
       expectedRental: 78000,
 
       appreciation: 13.4,
+
+      image: "/images/Properties/project_img_2.jpg",
 
       images: [
         "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c",
@@ -177,6 +176,8 @@ async function seedProperties() {
   expectedRental: 28000,
 
   appreciation: 10.2,
+
+  image: "/images/Properties/project_img_3.jpg",
 
   images: [
     "https://images.unsplash.com/photo-1494526585095-c41746248156",
@@ -247,6 +248,8 @@ async function seedProperties() {
 
   appreciation: 14.8,
 
+  image: "/images/Properties/project_img_4.jpg",
+
   images: [
     "https://images.unsplash.com/photo-1600585154526-990dced4db0d",
     "https://images.unsplash.com/photo-1600607687644-c7171b42498f",
@@ -315,6 +318,8 @@ async function seedProperties() {
 
   appreciation: 12.8,
 
+  image: "/images/Properties/project_img_5.jpg",
+
   images: [
     "https://images.unsplash.com/photo-1512917774080-9991f1c4c750",
     "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85",
@@ -344,66 +349,26 @@ async function seedProperties() {
 },
   ];
 
-  for (const property of properties) {
-    const created = await prisma.property.create({
-      data: {
-        title: property.title,
-        description: property.description,
-        price: property.price,
-        propertyType: property.propertyType as any,
-        listingType: property.listingType as any,
-        city: property.city,
-        locality: property.locality,
-        address: property.address,
-        bedrooms: property.bedrooms,
-        bathrooms: property.bathrooms,
-        area: property.area,
-        parking: property.parking,
-        furnishing: property.furnishing as any,
-        yearBuilt: property.yearBuilt,
-        latitude: property.latitude,
-        longitude: property.longitude,
-        expectedRental: property.expectedRental,
-        appreciation: property.appreciation,
-      },
-    });
-
-    await prisma.propertyImage.createMany({
-      data: property.images.map((imageUrl) => ({
-        imageUrl,
-        propertyId: created.id,
-      })),
-    });
-
-    await prisma.riskAnalysis.create({
-      data: {
-        propertyId: created.id,
-        ...property.risk,
-      },
-    });
-
-    await prisma.propertyScore.create({
-      data: {
-        propertyId: created.id,
-        ...property.score,
-      },
-    });
-  }
-}
-
-async function main() {
-  await prisma.propertyImage.deleteMany();
-  await prisma.propertyScore.deleteMany();
-  await prisma.riskAnalysis.deleteMany();
-  await prisma.property.deleteMany();
-
-  await seedProperties();
-
-  console.log("✅ Database seeded successfully.");
-}
-
-main()
-  .catch(console.error)
-  .finally(async () => {
-    await prisma.$disconnect();
-  });
+//   for (const property of properties) {
+//     const created = await prisma.property.create({
+//       data: {
+//         title: property.title,
+//         description: property.description,
+//         price: property.price,
+//         propertyType: property.propertyType as any,
+//         listingType: property.listingType as any,
+//         city: property.city,
+//         locality: property.locality,
+//         address: property.address,
+//         bedrooms: property.bedrooms,
+//         bathrooms: property.bathrooms,
+//         area: property.area,
+//         parking: property.parking,
+//         furnishing: property.furnishing as any,
+//         yearBuilt: property.yearBuilt,
+//         latitude: property.latitude,
+//         longitude: property.longitude,
+//         expectedRental: property.expectedRental,
+//         appreciation: property.appreciation,
+//       },
+//     });

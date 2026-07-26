@@ -69,13 +69,13 @@ export default function PropertyCard({
       
       {/* Content */}
 
-      <div className="p-6">
+      <div className="p-4">
 
         <div className="flex items-start justify-between">
 
           <div>
 
-            <h3 className="text-2xl font-bold text-white">
+            <h3 className="text-xl font-bold text-white">
 
               {property.title}
 
@@ -225,7 +225,7 @@ export default function PropertyCard({
             hover:bg-blue-700
           "
           >
-            Analyze AI
+            Virtual Tour With VFX
           </Link>
 
         </div>

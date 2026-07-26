@@ -9,14 +9,53 @@ import { ClipboardList } from "lucide-react";
 export default function Contact() {
   const [loading, setLoading] = useState(false);
 
+  // async function onSubmit(
+  //   event: React.FormEvent<HTMLFormElement>
+  // ) {
+  //   event.preventDefault();
+
+  //   setLoading(true);
+
+  //   const formData = new FormData(event.currentTarget);
+
+  //   formData.append(
+  //     "access_key",
+  //     "057e887e-cd8f-4b4c-bd18-a2a0da3b18fb"
+  //   );
+
+  //   const response = await fetch(
+  //     "https://api.web3forms.com/submit",
+  //     {
+  //       method: "POST",
+  //       body: formData,
+  //     }
+  //   );
+
+  //   const data = await response.json();
+
+  //   if (data.success) {
+  //     toast.success(
+  //       "Your message has been sent successfully!"
+  //     );
+
+  //     event.currentTarget.reset();
+  //   } else {
+  //     toast.error(data.message);
+  //   }
+
+  //   setLoading(false);
+  // }
   async function onSubmit(
-    event: React.FormEvent<HTMLFormElement>
-  ) {
-    event.preventDefault();
+  event: React.FormEvent<HTMLFormElement>
+) {
+  event.preventDefault();
 
-    setLoading(true);
+  const form = event.currentTarget;
 
-    const formData = new FormData(event.currentTarget);
+  setLoading(true);
+
+  try {
+    const formData = new FormData(form);
 
     formData.append(
       "access_key",
@@ -34,17 +73,20 @@ export default function Contact() {
     const data = await response.json();
 
     if (data.success) {
-      toast.success(
-        "Your message has been sent successfully!"
-      );
+      toast.success("Your message has been sent successfully!");
 
-      event.currentTarget.reset();
+      form.reset(); // Clears all fields
     } else {
-      toast.error(data.message);
+      toast.error(data.message || "Something went wrong.");
     }
+  } catch (error) {
+    console.error(error);
 
-    setLoading(false);
+    toast.error("Failed to send message. Please try again.");
+  } finally {
+    setLoading(false); // Always executes
   }
+}
 
   return (
     <section

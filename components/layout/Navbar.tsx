@@ -5,9 +5,12 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, X, Bot } from "lucide-react";
+import { UserButton, useAuth } from "@clerk/nextjs";
 
 
 export default function Navbar() {
+  const { userId } = useAuth();
+
   const pathname = usePathname();
 
   const isHome = pathname === "/";
@@ -139,8 +142,6 @@ export default function Navbar() {
           </nav>
 
           {/* Right Side */}
-
-          <div className="hidden items-center gap-4 lg:flex">
           <div className="hidden items-center gap-4 lg:flex">
             <Link href="/ai">
               <button
@@ -160,7 +161,7 @@ export default function Navbar() {
               </button>
             </Link>
 
-            <Link href="/sign-in">
+            {/* <Link href="/auth/sign-in">
               <button
                 className="
                   rounded-full
@@ -172,8 +173,25 @@ export default function Navbar() {
               >
                 Sign In
               </button>
-            </Link>
-          </div>
+            </Link> */}
+
+            {userId ? (
+                <UserButton />
+              ) : (
+                <Link href="/auth/sign-in">
+                  <button
+                    className="
+                      rounded-full
+                      border
+                      px-5 py-2.5
+                      transition
+                      hover:bg-gray-100
+                    "
+                  >
+                    Sign In
+                  </button>
+                </Link>
+              )}
           </div>
           {/* Mobile Button */}
           <button

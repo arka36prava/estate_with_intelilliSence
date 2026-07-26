@@ -5,6 +5,8 @@ import { BedDouble, Bath, MapPin, IndianRupee, Maximize } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
+
 
 interface PropertyCardProps {
   property: {
@@ -18,23 +20,24 @@ interface PropertyCardProps {
     area: number;
     expectedRental?: number;
     appreciation?: number;
-    image?: string;
+    images: {
+      imageUrl: string;
+    }[];
   };
 }
 
 export default function PropertyCard({
   property,
 }: PropertyCardProps) {
+  console.log(property);
+console.log("Image:", property.images);
   return (
     <Card className="mx-auto max-w-2xl overflow-hidden rounded-2xl shadow-md hover:shadow-xl transition-all">
 
       <div className="relative h-56 w-full">
 
         <Image
-          src={
-            property.image ??
-            "https://images.unsplash.com/photo-1568605114967-8130f3a36994"
-          }
+          src={property.images?.[0]?.imageUrl ?? "/images/placeholder.jpg"}
           alt={property.title}
           fill
           className="object-cover"
@@ -124,11 +127,11 @@ export default function PropertyCard({
 
         </div>
 
-        <Button className="w-full">
-
-          View Details
-
-        </Button>
+        <Link href={`/properties/${property.id}`}>
+          <Button className="w-full">
+            View Details
+          </Button>
+        </Link>
 
       </CardContent>
 

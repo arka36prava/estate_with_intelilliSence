@@ -14,7 +14,7 @@ export default function ImageReveal({
   src,
   alt,
   delay = 0,
-  height = "h-72",
+  height = "h-56",
 }: ImageRevealProps) {
   return (
     <div

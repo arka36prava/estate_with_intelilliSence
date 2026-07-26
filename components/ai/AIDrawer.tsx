@@ -54,6 +54,7 @@ export default function AIDrawer({
             messages={messages}
             loading={loading}
             report={report}
+            recommendedProperties={[]}
             onSuggestionClick={sendMessage}
           />
 
