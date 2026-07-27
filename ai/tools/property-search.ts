@@ -1,38 +1,11 @@
 import { prisma } from "@/lib/prisma";
-
-// export async function searchProperties(
-//   city: string,
-//   budget?: number
-// ) {
-//   return prisma.property.findMany({
-//     where: {
-//       city: {
-//         contains: city,
-//         mode: "insensitive",
-//       },
-
-//       ...(budget && {
-//         price: {
-//           lte: budget,
-//         },
-//       }),
-//     },
-
-//     include: {
-//       images: true,
-//       propertyScore: true,
-//       riskAnalysis: true,
-//     },
-
-//     take: 5,
-//   });
-// }
+import { mapPrismaProperty } from "@/lib/propertyMapper"; // adjust the path
 
 export async function searchProperties(
   city?: string,
   budget?: number
 ) {
-  return prisma.property.findMany({
+  const properties = await prisma.property.findMany({
     where: {
       ...(city && {
         city: {
@@ -40,20 +13,19 @@ export async function searchProperties(
           mode: "insensitive",
         },
       }),
-
       ...(budget && {
         price: {
           lte: budget,
         },
       }),
     },
-
     include: {
       images: true,
       propertyScore: true,
       riskAnalysis: true,
     },
-
     take: 5,
   });
+
+  return properties.map(mapPrismaProperty);
 }

@@ -1,6 +1,7 @@
 // lib/propertyMapper.ts
 
 export function mapPrismaProperty(property: any) {
+  console.log("Images from DB:", property.images);
   return {
   id: property.id,
   title: property.title,
@@ -30,8 +31,12 @@ export function mapPrismaProperty(property: any) {
    aiScore: property.propertyScore?.overallScore ?? 94,
    roi: property.appreciation ?? 0,
 
-  image: property.images?.[0]?.imageUrl,
-  images: property.images,
+  image:
+  property.images && property.images.length > 0
+    ? property.images[0].imageUrl
+    : "/images/placeholder.jpg",
+  images:property.images?.map((img: { imageUrl: string }) => img.imageUrl) ?? [],
+
 
   score: property.propertyScore,
   risk: property.riskAnalysis,

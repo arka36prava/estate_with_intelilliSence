@@ -8,11 +8,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 //   images: string[];
 // }
 interface ImageCarouselProps {
-  images: {
-    id: string;
-    imageUrl: string;
-    propertyId: string;
-  }[];
+  images: string[];
 }
 
 export default function ImageCarousel({
@@ -58,7 +54,7 @@ export default function ImageCarousel({
             className="relative min-w-full h-full"
           >
             <Image
-              src={img.imageUrl}
+              src={img}
               alt={`Property ${index + 1}`}
               fill
               priority={index === 0}

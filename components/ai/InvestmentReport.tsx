@@ -10,20 +10,22 @@ interface InvestmentReportProps {
     recommendation: string;
 
     property: {
+  id: string;
+  title: string;
+  city: string;
+  locality: string;
+  price: number;
+  bedrooms: number;
+  bathrooms: number;
+  area: number;
+  expectedRental?: number;
+  appreciation?: number;
 
-      id: string;
-      title: string;
-      city: string;
-      locality: string;
-      price: number;
-      bedrooms: number;
-      bathrooms: number;
-      area: number;
-      expectedRental?: number;
-      appreciation?: number;
-      image?: string;
+  image?: string;
 
-    };
+  roi?: number;
+  aiScore?: number;
+}
 
     affordability: {
 

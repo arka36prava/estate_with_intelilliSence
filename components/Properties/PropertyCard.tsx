@@ -22,7 +22,7 @@ interface PropertyCardProps {
 
     locality: string;
 
-    image: string;
+    image?: string;
 
     price: number;
 
@@ -63,7 +63,7 @@ export default function PropertyCard({
       {/* Image */}
 
       <ImageReveal
-        src={property.image}
+        src={property.image  || "/images/placeholder.jpg"}
         alt={property.title}
       />
       

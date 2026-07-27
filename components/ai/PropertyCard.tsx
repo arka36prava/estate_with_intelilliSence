@@ -20,9 +20,7 @@ interface PropertyCardProps {
     area: number;
     expectedRental?: number;
     appreciation?: number;
-    images: {
-      imageUrl: string;
-    }[];
+    image?: string;
   };
 }
 
@@ -30,14 +28,14 @@ export default function PropertyCard({
   property,
 }: PropertyCardProps) {
   console.log(property);
-console.log("Image:", property.images);
+console.log("Image:", property.image);
   return (
     <Card className="mx-auto max-w-2xl overflow-hidden rounded-2xl shadow-md hover:shadow-xl transition-all">
 
       <div className="relative h-56 w-full">
 
-        <Image
-          src={property.images?.[0]?.imageUrl ?? "/images/placeholder.jpg"}
+       <Image
+          src={property.image || "/images/placeholder.jpg"}
           alt={property.title}
           fill
           className="object-cover"
